@@ -1,0 +1,60 @@
+databaseChangeLog:
+  - changeSet:
+      id: 006-create-payments-table
+      author: nargiz
+      changes:
+        - createTable:
+            tableName: payments
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: amount
+                  type: decimal(19,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: currency
+                  type: varchar(10)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: payment_status
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: payment_source_type
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: from_account_number
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: to_account_number
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: customer_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_payments_customer
+                    references: customers(id)
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp

@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: 013-add-is-fallback-to-transactions
+      author: nargiz
+      changes:
+        - addColumn:
+            tableName: transactions
+            columns:
+              - column:
+                  name: is_fallback
+                  type: boolean
+                  defaultValueBoolean: false

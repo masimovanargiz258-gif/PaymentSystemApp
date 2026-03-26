@@ -1,0 +1,77 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-create-customers-table
+      author: nargiz
+      changes:
+        - createTable:
+            tableName: customers
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: surname
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: full_name
+                  type: varchar(255)
+              - column:
+                  name: fin
+                  type: varchar(7)
+                  constraints:
+                    unique: true
+              - column:
+                  name: voen
+                  type: varchar(255)
+                  constraints:
+                    unique: true
+              - column:
+                  name: birth_date
+                  type: date
+              - column:
+                  name: phone_number
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_visible
+                  type: boolean
+              - column:
+                  name: monthly_turnover
+                  type: decimal(19,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: customer_status
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: customer_type
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp

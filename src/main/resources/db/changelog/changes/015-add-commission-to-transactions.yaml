@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: 015-add-commission-to-transactions
+      author: nargiz
+      changes:
+        - addColumn:
+            tableName: transactions
+            columns:
+              - column:
+                  name: commission_amount
+                  type: decimal(19,2)
+                  defaultValueNumeric: "0"

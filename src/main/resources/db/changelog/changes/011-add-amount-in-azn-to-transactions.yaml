@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 011-add-amount-in-azn-to-transactions
+      author: nargiz
+      changes:
+        - addColumn:
+            tableName: transactions
+            columns:
+              - column:
+                  name: amount_in_azn
+                  type: decimal(19,2)
+                  constraints:
+                    nullable: false
+                  defaultValue: "0.00"

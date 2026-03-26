@@ -1,0 +1,54 @@
+databaseChangeLog:
+  - changeSet:
+      id: 003-create-current-accounts-table
+      author: nargiz
+      changes:
+        - createTable:
+            tableName: current_accounts
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: account_number
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: balance
+                  type: decimal(19,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: currency
+                  type: varchar(10)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: current_account_status
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: activation_date
+                  type: date
+              - column:
+                  name: customer_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_current_accounts_customer
+                    references: customers(id)
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp

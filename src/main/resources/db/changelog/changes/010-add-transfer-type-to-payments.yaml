@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 010-add-transfer-type-to-payments
+      author: nargiz
+      changes:
+        - addColumn:
+            tableName: payments
+            columns:
+              - column:
+                  name: transfer_type
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+                  defaultValue: EXTERNAL

@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: 009-add-expire-date-to-current-accounts
+      author: nargiz
+      changes:
+        - addColumn:
+            tableName: current_accounts
+            columns:
+              - column:
+                  name: expire_date
+                  type: date

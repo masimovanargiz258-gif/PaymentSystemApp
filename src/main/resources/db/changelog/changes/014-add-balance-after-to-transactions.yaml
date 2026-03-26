@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: 014-add-balance-after-to-transactions
+      author: nargiz
+      changes:
+        - addColumn:
+            tableName: transactions
+            columns:
+              - column:
+                  name: balance_after
+                  type: decimal(19,2)

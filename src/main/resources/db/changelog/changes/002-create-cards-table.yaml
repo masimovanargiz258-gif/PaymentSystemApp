@@ -1,0 +1,73 @@
+databaseChangeLog:
+  - changeSet:
+      id: 002-create-cards-table
+      author: nargiz
+      changes:
+        - createTable:
+            tableName: cards
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: cvv
+                  type: varchar(3)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: pan
+                  type: varchar(16)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: card_status
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: card_name
+                  type: varchar(255)
+              - column:
+                  name: is_visible
+                  type: boolean
+              - column:
+                  name: balance
+                  type: decimal(19,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: activation_date
+                  type: date
+              - column:
+                  name: currency
+                  type: varchar(10)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: card_type
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: expire_date
+                  type: date
+              - column:
+                  name: customer_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_cards_customer
+                    references: customers(id)
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp

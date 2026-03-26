@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: 012-add-commission-to-payments
+      author: nargiz
+      changes:
+        - addColumn:
+            tableName: payments
+            columns:
+              - column:
+                  name: commission_amount
+                  type: decimal(19,2)
