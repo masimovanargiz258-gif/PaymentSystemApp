@@ -165,5 +165,14 @@ public class GlobalExceptionHandler {
         response.setTimestamp(LocalDateTime.now());
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+    @ExceptionHandler(InsufficientBalanceException.class)
+    public ResponseEntity<ExceptionResponse> handleInsufficientBalanceException(InsufficientBalanceException e) {
+        ExceptionResponse response = new ExceptionResponse();
+        response.setMessage(e.getMessage());
+        response.setStatus(400);
+        response.setTimestamp(LocalDateTime.now());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
 
 }

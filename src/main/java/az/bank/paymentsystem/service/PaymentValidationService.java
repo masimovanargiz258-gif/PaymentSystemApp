@@ -77,6 +77,14 @@ public class PaymentValidationService {
         if (card.getExpireDate() != null && card.getExpireDate().isBefore(LocalDate.now())) {
             throw new CardStatusException(messageService.getMessage("card.is.expired"));
         }
+        BigDecimal cardBalanceInAZN = currencyConverter.convertToAZN(card.getBalance(), card.getCurrency());
+        if (cardBalanceInAZN.compareTo(limitsConfig.getCardMinBalance()) < 0) {
+            List<CurrentAccountEntity> accounts = currentAccountRepository.findByCustomerIdAndCurrentAccountStatusForUpdate(request.getCustomerId(), CurrentAccountStatus.ACTIVE);
+            if (accounts.isEmpty()) {
+                throw new InsufficientBalanceException(
+                        messageService.getMessage("card.insufficient.balance"));
+            }
+        }
     }
 
     public void validateAccountPayment(BasePaymentRequest request) {
@@ -87,11 +95,11 @@ public class PaymentValidationService {
         validateAccountActiveStatus(account);
         BigDecimal accountBalanceInUSD = currencyConverter.convertToUSD(account.getBalance(), account.getCurrency());
         if (accountBalanceInUSD.compareTo(limitsConfig.getAccountMinBalance()) < 0) {
-            throw new PaymentAmountException(messageService.getMessage("payment.amount.limit"));
+            throw new InsufficientBalanceException(messageService.getMessage("account.insufficient.balance"));
         }
         BigDecimal amountToDeduct = currencyConverter.convert(request.getAmount(), request.getCurrency(), account.getCurrency());
         if (account.getBalance().compareTo(amountToDeduct) < 0) {
-            throw new InsufficientAmountException(messageService.getMessage("insufficient.amount"));
+            throw new InsufficientBalanceException(messageService.getMessage("insufficient.funds"));
         }
 
     }
