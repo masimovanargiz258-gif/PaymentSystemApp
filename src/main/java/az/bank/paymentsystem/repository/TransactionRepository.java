@@ -11,5 +11,6 @@ import java.util.List;
 public interface TransactionRepository extends JpaRepository<TransactionEntity, Long> {
     @Query("SELECT t FROM TransactionEntity t " + "WHERE t.fromAccountNumber = :accountNumber " + "AND t.paymentSourceType = :sourceType " + "ORDER BY t.transactionDate DESC LIMIT 100")
     List<TransactionEntity> findTop100ByAccountNumber(@Param("accountNumber") String accountNumber, @Param("sourceType") PaymentSourceType sourceType);
-
+    @Query("SELECT t FROM TransactionEntity t " + "WHERE t.fromAccountNumber = :accountNumber " + "ORDER BY t.transactionDate DESC LIMIT 100")
+    List<TransactionEntity> findTop100ByAccountNumberOnly(@Param("accountNumber") String accountNumber);
 }

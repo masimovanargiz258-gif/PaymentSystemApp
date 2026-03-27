@@ -139,6 +139,7 @@ public class TransactionService {
                 currentAccountRepository.save(account);
                 transaction.setBalanceAfter(account.getBalance());
                 transaction.setIsFallback(true);
+                transaction.setFromAccountNumber(account.getAccountNumber());
                 handleSuccess(transaction, payment);
                 success = true;
                 break;
@@ -227,7 +228,7 @@ public class TransactionService {
     }
 
     public List<TransactionResponse> getLast100ByCurrentAccount(String accountNumber) {
-        return transactionRepository.findTop100ByAccountNumber(accountNumber, PaymentSourceType.CURRENT_ACCOUNT).stream().map(this::mapToResponse).toList();
+        return transactionRepository.findTop100ByAccountNumberOnly(accountNumber).stream().map(this::mapToResponse).toList();
     }
 
     private TransactionResponse mapToResponse(TransactionEntity entity) {
