@@ -81,8 +81,7 @@ public class PaymentValidationService {
         if (cardBalanceInAZN.compareTo(limitsConfig.getCardMinBalance()) < 0) {
             List<CurrentAccountEntity> accounts = currentAccountRepository.findByCustomerIdAndCurrentAccountStatusForUpdate(request.getCustomerId(), CurrentAccountStatus.ACTIVE);
             if (accounts.isEmpty()) {
-                throw new InsufficientBalanceException(
-                        messageService.getMessage("card.insufficient.balance"));
+                throw new InsufficientBalanceException(messageService.getMessage("card.insufficient.balance"));
             }
         }
     }

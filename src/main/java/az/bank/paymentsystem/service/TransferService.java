@@ -85,10 +85,8 @@ public class TransferService {
         return saveAndMap(request, customer, TransferType.EXTERNAL, sourceType);
     }
 
-    private TransferResponse saveAndMap(TransferRequest request, CustomerEntity customer,
-                                        TransferType transferType, PaymentSourceType sourceType) {
-        return mapToResponse(paymentRepository.save(
-                buildPayment(request, customer, transferType, sourceType)));
+    private TransferResponse saveAndMap(TransferRequest request, CustomerEntity customer, TransferType transferType, PaymentSourceType sourceType) {
+        return mapToResponse(paymentRepository.save(buildPayment(request, customer, transferType, sourceType)));
     }
     private void validateNotSameAccount(TransferRequest request) {
         if (request.getFromAccountNumber().equals(request.getToAccountNumber())) {

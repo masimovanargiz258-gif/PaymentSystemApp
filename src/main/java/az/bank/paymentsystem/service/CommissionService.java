@@ -15,8 +15,7 @@ public class CommissionService {
 
     public BigDecimal calculateCommission(BigDecimal amount, String toAccountNumber) {
         if (isExternal(toAccountNumber)) {
-            return amount.multiply(limitsConfig.getExternalCommissionRate())
-                    .setScale(2, RoundingMode.HALF_UP);
+            return amount.multiply(limitsConfig.getExternalCommissionRate()).setScale(2, RoundingMode.HALF_UP);
         }
         return BigDecimal.ZERO;
     }

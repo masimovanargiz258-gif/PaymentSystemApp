@@ -125,8 +125,7 @@ public class CustomerService {
 
     public void unblockCustomer(Long id) {
         CustomerEntity customer = customerRepository.findWithCardAndAccountsById(id).orElseThrow(() -> new CustomerNotFoundException(messageService.getMessage("customer.not.found")));
-        if (customer.getCustomerStatus() != CustomerStatus.BLOCKED &&
-                customer.getCustomerStatus() != CustomerStatus.SUSPICIOUS) {
+        if (customer.getCustomerStatus() != CustomerStatus.BLOCKED && customer.getCustomerStatus() != CustomerStatus.SUSPICIOUS) {
             throw new CustomerStatusException(messageService.getMessage("customer.is.not.blocked"));
         }
         customer.setCustomerStatus(CustomerStatus.ACTIVE);

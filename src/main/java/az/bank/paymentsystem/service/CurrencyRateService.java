@@ -43,8 +43,7 @@ public class CurrencyRateService {
                 .findFirst();
 
         if (matchedValute.isEmpty()) {
-            throw new IllegalArgumentException(
-                    "Currency code not found: " + normalizedCode);
+            throw new IllegalArgumentException("Currency code not found: " + normalizedCode);
         }
         return matchedValute.get();
     }
