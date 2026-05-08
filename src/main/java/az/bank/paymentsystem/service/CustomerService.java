@@ -14,12 +14,14 @@ import az.bank.paymentsystem.model.CustomerUpdateRequest;
 import az.bank.paymentsystem.repository.CardRepository;
 import az.bank.paymentsystem.repository.CurrentAccountRepository;
 import az.bank.paymentsystem.repository.CustomerRepository;
+import az.bank.paymentsystem.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,9 +31,11 @@ public class CustomerService {
     private final CardRepository cardRepository;
     private final CurrentAccountRepository currentAccountRepository;
     private final MessageService messageService;
+    private final SecurityUtils securityUtils;
 
 
     public CustomerResponse getCustomerById(Long id) {
+        securityUtils.checkOwnership(id);
         return mapToResponse(findCustomerById(id));
     }
 
@@ -58,11 +62,14 @@ public class CustomerService {
                 throw new CustomerAlreadyExistsException(messageService.getMessage("customer.already.exists"));
             }
         }
-        return mapToResponse(customerRepository.save(buildCustomerEntity(request)));
+        CustomerEntity entity = buildCustomerEntity(request);
+        entity.setRegistrationToken(UUID.randomUUID().toString());
+        return mapToResponse(customerRepository.save(entity));
     }
 
 
     public CustomerResponse updateFullCustomer(Long id, CustomerRequest request) {
+        securityUtils.checkOwnership(id);
         CustomerEntity customer = findCustomerById(id);
         validateCustomerStatus(customer);
         customer.setName(request.getName());
@@ -75,6 +82,7 @@ public class CustomerService {
 
 
     public CustomerResponse updateHalfCustomer(Long id, CustomerUpdateRequest request) {
+        securityUtils.checkOwnership(id);
         CustomerEntity customer = findCustomerById(id);
         validateCustomerStatus(customer);
         if (request.getName() != null) {
@@ -170,6 +178,7 @@ public class CustomerService {
         response.setPhoneNumber(entity.getPhoneNumber());
         response.setBirthDate(entity.getBirthDate());
         response.setEmail(entity.getEmail());
+        response.setRegistrationToken(entity.getRegistrationToken());
         return response;
     }
 

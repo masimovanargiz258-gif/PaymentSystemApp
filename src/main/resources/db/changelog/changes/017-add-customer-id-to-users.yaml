@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - changeSet:
+      id: 017-add-customer-id-to-users
+      author: nargiz
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: customer_id
+                  type: bigint
+                  constraints:
+                    nullable: true
+                    foreignKeyName: fk_users_customer
+                    references: customers(id)

@@ -3,11 +3,14 @@ package az.bank.paymentsystem.service;
 import az.bank.paymentsystem.config.PaymentLimitsConfig;
 import az.bank.paymentsystem.constant.Constant;
 import az.bank.paymentsystem.enums.*;
+import az.bank.paymentsystem.exception.AccountNotFoundException;
+import az.bank.paymentsystem.exception.CardNotFoundException;
 import az.bank.paymentsystem.exception.CustomerNotFoundException;
 import az.bank.paymentsystem.model.TransactionResponse;
 import az.bank.paymentsystem.model.entity.*;
 import az.bank.paymentsystem.repository.*;
 import az.bank.paymentsystem.util.CurrencyConverter;
+import az.bank.paymentsystem.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +32,7 @@ public class TransactionService {
     private final CurrencyConverter currencyConverter;
     private final PaymentLimitsConfig limitsConfig;
     private final MessageService messageService;
+    private final SecurityUtils securityUtils;
     private TransactionService self;
     @Autowired
     @Lazy
@@ -224,10 +228,18 @@ public class TransactionService {
     }
 
     public List<TransactionResponse> getLast100ByCard(String pan) {
+        if (securityUtils.isNotAdmin()) {
+            CardEntity card = cardRepository.findByPan(pan).orElseThrow(() -> new CardNotFoundException(messageService.getMessage("card.not.found")));
+            securityUtils.checkOwnership(card.getCustomer().getId());
+        }
         return transactionRepository.findTop100ByAccountNumber(pan, PaymentSourceType.CARD).stream().map(this::mapToResponse).toList();
     }
 
     public List<TransactionResponse> getLast100ByCurrentAccount(String accountNumber) {
+        if (securityUtils.isNotAdmin()) {
+            CurrentAccountEntity account = currentAccountRepository.findByAccountNumber(accountNumber).orElseThrow(() -> new AccountNotFoundException(messageService.getMessage("account.not.found")));
+            securityUtils.checkOwnership(account.getCustomer().getId());
+        }
         return transactionRepository.findTop100ByAccountNumberOnly(accountNumber).stream().map(this::mapToResponse).toList();
     }
 

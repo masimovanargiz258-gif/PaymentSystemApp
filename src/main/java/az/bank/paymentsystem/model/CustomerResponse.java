@@ -23,4 +23,5 @@ public class CustomerResponse {
     private String email;
     private CustomerStatus customerStatus;
     private CustomerType customerType;
+    private String registrationToken;
 }

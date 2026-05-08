@@ -21,5 +21,6 @@ public interface CustomerRepository extends JpaRepository<CustomerEntity, Long> 
     @EntityGraph(attributePaths = {"cards", "currentAccounts"})
     @Query("SELECT c FROM CustomerEntity c WHERE c.id = :id")
     Optional<CustomerEntity> findByIdForUpdate(@Param("id") Long id);
+    Optional<CustomerEntity> findByRegistrationToken(String registrationToken);
 }
 

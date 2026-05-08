@@ -173,6 +173,39 @@ public class GlobalExceptionHandler {
         response.setTimestamp(LocalDateTime.now());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
+    @ExceptionHandler(ForbiddenOperationException.class)
+    public ResponseEntity<ExceptionResponse> handleForbiddenOperationException(ForbiddenOperationException e) {
+        ExceptionResponse response = new ExceptionResponse();
+        response.setMessage(e.getMessage());
+        response.setStatus(403);
+        response.setTimestamp(LocalDateTime.now());
+        return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
+    }
 
+    @ExceptionHandler(UsernameAlreadyExistsException.class)
+    public ResponseEntity<ExceptionResponse> handleUsernameAlreadyExistsException(UsernameAlreadyExistsException e) {
+        ExceptionResponse response = new ExceptionResponse();
+        response.setMessage(e.getMessage());
+        response.setStatus(409);
+        response.setTimestamp(LocalDateTime.now());
+        return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleUserNotFoundException(UserNotFoundException e) {
+        ExceptionResponse response = new ExceptionResponse();
+        response.setMessage(e.getMessage());
+        response.setStatus(404);
+        response.setTimestamp(LocalDateTime.now());
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+    @ExceptionHandler(InvalidRegistrationTokenException.class)
+    public ResponseEntity<ExceptionResponse> handleInvalidRegistrationTokenException(InvalidRegistrationTokenException e) {
+        ExceptionResponse response = new ExceptionResponse();
+        response.setMessage(e.getMessage());
+        response.setStatus(400);
+        response.setTimestamp(LocalDateTime.now());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
 
 }

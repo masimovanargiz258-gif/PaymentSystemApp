@@ -49,4 +49,8 @@ public class CustomerEntity extends BaseEntity {
     Set<CurrentAccountEntity> currentAccounts;
     @OneToMany(mappedBy = "customer")
     Set<CardEntity> cards;
+    @OneToOne(mappedBy = "customer")
+    private UserEntity user;
+    @Column(unique = true)
+    private String registrationToken;
 }

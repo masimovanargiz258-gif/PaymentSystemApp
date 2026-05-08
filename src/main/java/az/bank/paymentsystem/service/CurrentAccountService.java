@@ -7,6 +7,7 @@ import az.bank.paymentsystem.exception.*;
 import az.bank.paymentsystem.model.CurrentAccountResponse;
 import az.bank.paymentsystem.repository.CurrentAccountRepository;
 import az.bank.paymentsystem.repository.CustomerRepository;
+import az.bank.paymentsystem.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,21 +22,26 @@ public class CurrentAccountService {
     private final CurrentAccountRepository currentAccountRepository;
     private final CustomerRepository customerRepository;
     private final MessageService messageService;
+    private final SecurityUtils securityUtils;
 
     public CurrentAccountResponse getCurrentAccountById(Long id) {
-        return mapToResponse(findAccountById(id));
+        CurrentAccountEntity account = findAccountById(id);
+        securityUtils.checkOwnership(account.getCustomer().getId());
+        return mapToResponse(account);
     }
 
     public List<CurrentAccountResponse> getAllCurrentAccounts(Long customerId) {
         if (!customerRepository.existsById(customerId)) {
             throw new CustomerNotFoundException(messageService.getMessage("customer.not.found"));
         }
+        securityUtils.checkOwnership(customerId);
         return currentAccountRepository.findByCustomerId(customerId).stream().map(this::mapToResponse).collect(Collectors.toList());
     }
 
    @Transactional
     public CurrentAccountResponse cancelCurrentAccount(Long id) {
         CurrentAccountEntity account = findAccountById(id);
+       securityUtils.checkOwnership(account.getCustomer().getId());
         validateAccountStatus(account);
         account.setCurrentAccountStatus(CurrentAccountStatus.CANCELED);
         return mapToResponse(currentAccountRepository.save(account));
@@ -44,6 +50,7 @@ public class CurrentAccountService {
     @Transactional
     public CurrentAccountResponse deposit(Long id, CurrentAccountDepositRequest request) {
         CurrentAccountEntity account = findAccountById(id);
+        securityUtils.checkOwnership(account.getCustomer().getId());
         validateAccountStatus(account);
         if (request.getAmount() == null || request.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
             throw new InsufficientAmountException(messageService.getMessage("insufficient.amount"));

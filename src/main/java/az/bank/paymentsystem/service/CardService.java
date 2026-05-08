@@ -5,6 +5,7 @@ import az.bank.paymentsystem.enums.CardStatus;
 import az.bank.paymentsystem.exception.*;
 import az.bank.paymentsystem.repository.CardRepository;
 import az.bank.paymentsystem.repository.CustomerRepository;
+import az.bank.paymentsystem.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,21 +20,27 @@ public class CardService {
     private final CardRepository cardRepository;
     private final CustomerRepository customerRepository;
     private final MessageService messageService;
+    private final SecurityUtils securityUtils;
 
     public CardResponse getCardById(Long id) {
-        return mapToResponse(findCardById(id));
+        CardEntity card = findCardById(id);
+        securityUtils.checkOwnership(card.getCustomer().getId());
+        return mapToResponse(card);
+
     }
 
     public List<CardResponse> getCardByCustomerId(Long customerId) {
         if (!customerRepository.existsById(customerId)) {
             throw new CustomerNotFoundException(messageService.getMessage("customer.not.found"));
         }
+        securityUtils.checkOwnership(customerId);
         return cardRepository.findByCustomerId(customerId).stream().map(this::mapToResponse).collect(Collectors.toList());
     }
 
     @Transactional
     public CardResponse updateCard(Long id, CardUpdateRequest request) {
         CardEntity card = findCardById(id);
+        securityUtils.checkOwnership(card.getCustomer().getId());
         if (request.getCardName() != null) {
             card.setCardName(request.getCardName());
         }
@@ -46,6 +53,7 @@ public class CardService {
     @Transactional
     public CardResponse cancelCard(Long id) {
         CardEntity card = findCardById(id);
+        securityUtils.checkOwnership(card.getCustomer().getId());
         validateCardStatus(card);
         card.setCardStatus(CardStatus.CANCELED);
         return mapToResponse(cardRepository.save(card));
@@ -54,6 +62,7 @@ public class CardService {
     @Transactional
     public CardResponse deposit(Long id, CardDepositRequest request) {
         CardEntity card = findCardById(id);
+        securityUtils.checkOwnership(card.getCustomer().getId());
         validateCardStatus(card);
         if (request.getAmount() == null || request.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
             throw new InsufficientAmountException(messageService.getMessage("insufficient.amount"));

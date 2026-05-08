@@ -10,6 +10,7 @@ import az.bank.paymentsystem.model.TransferResponse;
 import az.bank.paymentsystem.model.entity.CustomerEntity;
 import az.bank.paymentsystem.model.entity.PaymentEntity;
 import az.bank.paymentsystem.repository.PaymentRepository;
+import az.bank.paymentsystem.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,9 +25,11 @@ public class TransferService {
     private final PaymentValidationService validationService;
     private final MessageService messageService;
     private final CommissionService commissionService;
+    private final SecurityUtils securityUtils;
 
     @Transactional
     public TransferResponse cardToCard(TransferRequest request) {
+        securityUtils.checkOwnership(request.getCustomerId());
         validateNotSameAccount(request);
         CustomerEntity customer = validationService.findAndValidateCustomer(request.getCustomerId());
         validationService.validatePaymentMethod(request.getCustomerId(), PaymentSourceType.CARD);
@@ -37,6 +40,7 @@ public class TransferService {
 
     @Transactional
     public TransferResponse cardToAccount(TransferRequest request) {
+        securityUtils.checkOwnership(request.getCustomerId());
         validateNotSameAccount(request);
         CustomerEntity customer = validationService.findAndValidateCustomer(request.getCustomerId());
         validationService.validatePaymentMethod(request.getCustomerId(), PaymentSourceType.CARD);
@@ -47,6 +51,7 @@ public class TransferService {
 
     @Transactional
     public TransferResponse accountToAccount(TransferRequest request) {
+        securityUtils.checkOwnership(request.getCustomerId());
         validateNotSameAccount(request);
         CustomerEntity customer = validationService.findAndValidateCustomer(request.getCustomerId());
         validationService.validatePaymentMethod(request.getCustomerId(), PaymentSourceType.CURRENT_ACCOUNT);
@@ -57,6 +62,7 @@ public class TransferService {
 
     @Transactional
     public TransferResponse accountToCard(TransferRequest request) {
+        securityUtils.checkOwnership(request.getCustomerId());
         validateNotSameAccount(request);
         CustomerEntity customer = validationService.findAndValidateCustomer(request.getCustomerId());
         validationService.validatePaymentMethod(request.getCustomerId(), PaymentSourceType.CURRENT_ACCOUNT);
@@ -67,6 +73,7 @@ public class TransferService {
 
     @Transactional
     public TransferResponse external(TransferRequest request) {
+        securityUtils.checkOwnership(request.getCustomerId());
         validateNotSameAccount(request);
         CustomerEntity customer = validationService.findAndValidateCustomer(request.getCustomerId());
         PaymentSourceType sourceType;

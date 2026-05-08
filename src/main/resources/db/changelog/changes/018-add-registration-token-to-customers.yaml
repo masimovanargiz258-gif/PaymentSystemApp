@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 018-add-registration-token-to-customers
+      author: nargiz
+      changes:
+        - addColumn:
+            tableName: customers
+            columns:
+              - column:
+                  name: registration_token
+                  type: varchar(255)
+                  constraints:
+                    unique: true
+                    nullable: true

@@ -7,6 +7,7 @@ import az.bank.paymentsystem.model.PaymentResponse;
 import az.bank.paymentsystem.model.entity.CustomerEntity;
 import az.bank.paymentsystem.model.entity.PaymentEntity;
 import az.bank.paymentsystem.repository.PaymentRepository;
+import az.bank.paymentsystem.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,9 +21,11 @@ public class PaymentService {
     private final PaymentRepository paymentRepository;
     private final PaymentValidationService validationService;
     private final CommissionService commissionService;
+    private final SecurityUtils securityUtils;
 
     @Transactional
     public PaymentResponse createPayment(PaymentRequest request) {
+        securityUtils.checkOwnership(request.getCustomerId());
         CustomerEntity customer = validationService.findAndValidateCustomer(request.getCustomerId());
         validationService.validatePaymentMethod(request.getCustomerId(), request.getPaymentSourceType());
         validationService.validatePaymentSource(request);

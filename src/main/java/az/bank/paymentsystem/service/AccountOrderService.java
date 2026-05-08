@@ -14,6 +14,7 @@ import az.bank.paymentsystem.repository.AccountOrderRepository;
 import az.bank.paymentsystem.repository.CurrentAccountRepository;
 import az.bank.paymentsystem.repository.CustomerRepository;
 import az.bank.paymentsystem.util.CustomerValidationUtils;
+import az.bank.paymentsystem.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,8 +35,10 @@ public class AccountOrderService {
     private final MessageService messageService;
     private final PaymentLimitsConfig limitsConfig;
     private final CustomerValidationUtils customerValidationUtils;
+    private final SecurityUtils securityUtils;
     @Transactional
     public CurrentAccountResponse orderCurrentAccount(AccountOrderRequest request) {
+        securityUtils.checkOwnership(request.getCustomerId());
         CustomerEntity customer = customerRepository.findById(request.getCustomerId()).orElseThrow(() -> new CustomerNotFoundException(messageService.getMessage("customer.not.found")));
         customerValidationUtils.validateStatus(customer);
         customerValidationUtils.validateAge(customer);
