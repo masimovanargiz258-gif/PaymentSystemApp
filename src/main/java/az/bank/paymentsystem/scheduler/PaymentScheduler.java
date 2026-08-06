@@ -19,7 +19,6 @@ public class PaymentScheduler {
     @Scheduled(cron = "${scheduler.payment.cron}")
     @SchedulerLock(name = "paymentSchedulerLock", lockAtMostFor = "PT1H")
     public void processPayments() {
-
         transactionService.processAllPendingPayments();
     }
     @Scheduled(cron = "${scheduler.card.expire.cron}")

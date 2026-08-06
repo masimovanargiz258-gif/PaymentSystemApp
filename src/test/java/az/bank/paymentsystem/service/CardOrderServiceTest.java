@@ -10,6 +10,7 @@ import az.bank.paymentsystem.repository.CardOrderRepository;
 import az.bank.paymentsystem.repository.CardRepository;
 import az.bank.paymentsystem.repository.CustomerRepository;
 import az.bank.paymentsystem.util.CustomerValidationUtils;
+import az.bank.paymentsystem.util.SecurityUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -41,6 +42,8 @@ class CardOrderServiceTest {
     private PaymentLimitsConfig limitsConfig;
     @Mock
     private CustomerValidationUtils customerValidationUtils;
+    @Mock
+    private SecurityUtils securityUtils;
 
     @InjectMocks
     private CardOrderService cardOrderService;

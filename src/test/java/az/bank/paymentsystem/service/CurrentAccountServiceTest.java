@@ -10,6 +10,7 @@ import az.bank.paymentsystem.model.CurrentAccountResponse;
 import az.bank.paymentsystem.model.entity.CurrentAccountEntity;
 import az.bank.paymentsystem.model.entity.CustomerEntity;
 import az.bank.paymentsystem.repository.CurrentAccountRepository;
+import az.bank.paymentsystem.util.SecurityUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -29,12 +30,12 @@ class CurrentAccountServiceTest {
 
     @Mock
     private CurrentAccountRepository currentAccountRepository;
-
     @Mock
     private MessageService messageService;
-
     @InjectMocks
     private CurrentAccountService currentAccountService;
+    @Mock
+    private SecurityUtils securityUtils;
 
     @Test
     void deposit_NewAccount_BecomesActive() {

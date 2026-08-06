@@ -10,6 +10,8 @@ import az.bank.paymentsystem.model.CardResponse;
 import az.bank.paymentsystem.model.entity.CardEntity;
 import az.bank.paymentsystem.model.entity.CustomerEntity;
 import az.bank.paymentsystem.repository.CardRepository;
+import az.bank.paymentsystem.repository.CustomerRepository;
+import az.bank.paymentsystem.util.SecurityUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,13 +28,14 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class CardServiceTest {
-
     @Mock
     private CardRepository cardRepository;
-
+    @Mock
+    private CustomerRepository customerRepository;
     @Mock
     private MessageService messageService;
-
+    @Mock
+    private SecurityUtils securityUtils;
     @InjectMocks
     private CardService cardService;
 

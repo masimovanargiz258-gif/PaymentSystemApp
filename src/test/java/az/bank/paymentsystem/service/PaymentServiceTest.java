@@ -7,6 +7,7 @@ import az.bank.paymentsystem.model.entity.CustomerEntity;
 import az.bank.paymentsystem.model.entity.PaymentEntity;
 import az.bank.paymentsystem.model.PaymentRequest;
 import az.bank.paymentsystem.repository.PaymentRepository;
+import az.bank.paymentsystem.util.SecurityUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -29,7 +30,8 @@ class PaymentServiceTest {
     private PaymentValidationService validationService;
     @Mock
     private CommissionService commissionService;
-
+    @Mock
+    private SecurityUtils securityUtils;
     @InjectMocks
     private PaymentService paymentService;
 

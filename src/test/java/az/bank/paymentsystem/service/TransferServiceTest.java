@@ -7,6 +7,7 @@ import az.bank.paymentsystem.model.entity.CustomerEntity;
 import az.bank.paymentsystem.model.entity.PaymentEntity;
 import az.bank.paymentsystem.model.TransferRequest;
 import az.bank.paymentsystem.repository.PaymentRepository;
+import az.bank.paymentsystem.util.SecurityUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -22,17 +23,19 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class TransferServiceTest {
 
-    @Mock
-    private PaymentRepository paymentRepository;
-    @Mock
-    private PaymentValidationService validationService;
-    @Mock
-    private MessageService messageService;
-    @Mock
-    private CommissionService commissionService;
+@Mock
+private PaymentRepository paymentRepository;
+@Mock
+private PaymentValidationService validationService;
+@Mock
+private MessageService messageService;
+@Mock
+private CommissionService commissionService;
+@Mock
+private SecurityUtils securityUtils;
 
-    @InjectMocks
-    private TransferService transferService;
+@InjectMocks
+private TransferService transferService;
 
     @Test
     void cardToCard_Success() {
